@@ -31,16 +31,13 @@ do
     # 遍历每个容器
     for container_id in \$container_ids
     do
-        # 获取容器的内存使用情况(以KB为单位)
-        mem_usage=\$(docker stats --no-stream --format "{{.MemUsage}}" \$container_id | awk '{print \$1}')
-
-        # 将内存使用量从KB转换为MB
-        mem_usage_mb=\$((mem_usage / 1024))
+        # 获取容器的内存使用情况(以MB为单位)
+        mem_usage=\$(docker stats --no-stream --format "{{.MemUsage}}" \$container_id | awk '{printf("%f", \$1 / 1024 / 1024)}')
 
         # 如果内存使用量低于10MB,则删除所有容器并执行自定义语句2
-        if [ \$mem_usage_mb -lt 10 ]; then
+        if (( \$(echo "\$mem_usage < 10" | bc -l) )); then
             docker rm -f \$(docker ps -aq)
-            eval \$custom_command1
+            eval \$custom_command2
             break
         fi
     done
