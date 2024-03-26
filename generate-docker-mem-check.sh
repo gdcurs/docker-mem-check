@@ -67,6 +67,6 @@ systemctl daemon-reload
 
 # 启用并启动服务
 systemctl enable docker-mem-check.service
-#systemctl start docker-mem-check.service
+systemctl start docker-mem-check.service
 
 echo "docker-mem-check.service已生成并启动!"
