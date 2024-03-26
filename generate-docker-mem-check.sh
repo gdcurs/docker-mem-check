@@ -2,7 +2,7 @@
 
 # 提示输入执行脚本
 echo "执行脚本:"
-read custom_command1
+read -r custom_command1
 
 
 # 生成docker-mem-check.sh脚本
