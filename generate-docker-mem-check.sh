@@ -3,15 +3,14 @@
 # 提示输入执行脚本
 echo "执行脚本:"
 read -r custom_command1
-
+custom_command1=${custom_command1//\"/\\\"}
 
 # 生成docker-mem-check.sh脚本
 cat << EOF > /usr/local/bin/docker-mem-check.sh
 #!/bin/bash
 
 # 自定义语句1
-custom_command1=${custom_command1//\"/\\\"}
-custom_command1="\"$custom_command1\""
+custom_command1=\"$custom_command1\"
 
 # 延迟5分钟后删除所有容器
 sleep 2m
