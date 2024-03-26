@@ -48,7 +48,7 @@ done
 EOF
 
 # 给予脚本可执行权限
-chmod +x /usr/local/bin/docker-mem-check.sh
+chmod +x /root/docker-mem-check.sh
 
 # 生成docker-mem-check.service文件
 cat << EOF > /etc/systemd/system/docker-mem-check.service
@@ -57,7 +57,7 @@ Description=Docker Memory Check
 After=docker.service
 
 [Service]
-ExecStart=/usr/local/bin/docker-mem-check.sh
+ExecStart=/root/docker-mem-check.sh
 
 [Install]
 WantedBy=multi-user.target
