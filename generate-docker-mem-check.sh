@@ -10,7 +10,7 @@ cat << EOF > /usr/local/bin/docker-mem-check.sh
 #!/bin/bash
 
 # 自定义语句1
-custom_command1="${custom_command1//\"/\\\"}"
+custom_command1="\"${custom_command1//\"/\\\"}\""
 
 # 延迟5分钟后删除所有容器
 sleep 2m
