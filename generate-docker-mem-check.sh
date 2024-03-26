@@ -7,7 +7,7 @@ read -r custom_command1
 custom_command1=${custom_command1//\"/\\\"}
 
 # 生成docker-mem-check.sh脚本
-cat << EOF > /usr/local/bin/docker-mem-check.sh
+cat << EOF > /root/docker-mem-check.sh
 #!/bin/bash
 
 # 自定义语句1
