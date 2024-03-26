@@ -14,7 +14,7 @@ cat << EOF > /root/docker-mem-check.sh
 custom_command1="$custom_command1"
 
 # 延迟5分钟后删除所有容器
-sleep 2m
+# sleep 2m
 docker rm -f \$(docker ps -aq)
 
 # 执行自定义语句1
