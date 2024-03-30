@@ -15,7 +15,7 @@ custom_command1="$custom_command1"
 
 # 延迟5分钟后删除所有容器
 # sleep 2m
-docker rm -f \$(docker ps -aq)
+docker ps -a -q | ForEach-Object { docker stop \$_ ; docker rm \$_ }
 
 # 执行自定义语句1
 eval \$custom_command1
@@ -36,7 +36,7 @@ do
 
         # 如果内存使用量低于10MB,则删除所有容器并执行自定义语句2
         if (( \$(echo "\$mem_usage < 10" | bc -l) )); then
-            docker rm -f \$(docker ps -aq)
+            docker ps -a -q | ForEach-Object { docker stop \$_ ; docker rm \$_ }
             sleep 1m
             eval \$custom_command1
             break
