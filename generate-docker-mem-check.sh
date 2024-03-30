@@ -37,7 +37,7 @@ do
         # 如果内存使用量低于10MB,则删除所有容器并执行自定义语句2
         if (( \$(echo "\$mem_usage < 10" | bc -l) )); then
             docker rm -f \$(docker ps -aq)
-            eval \$custom_command2
+            eval \$custom_command1
             break
         fi
     done
