@@ -32,7 +32,7 @@ do
     for container_id in \$container_ids
     do
         # 获取容器的内存使用情况(以MB为单位)
-        mem_usage=\$(docker stats --no-stream --format "{{.MemUsage}}" \$container_id | awk '{printf("%f", \$1 / 1024 / 1024)}')
+        mem_usage=\$(docker stats --no-stream --format "{{.MemUsage}}" \$container_id | awk '{print \$1}' | tr -d '[:alpha:]')
 
         # 如果内存使用量低于10MB,则删除所有容器并执行自定义语句2
         if (( \$(echo "\$mem_usage < 10" | bc -l) )); then
