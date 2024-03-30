@@ -44,7 +44,7 @@ do
         mem_usage_unit=\$(docker stats --no-stream --format "{{.MemUsage}}" \$container_id | awk '{print \$1}' | tr -d '[:digit:]')
         echo echo "容器 \$container_id 的使用内存大小为: \$mem_usage+\$mem_usage_unit"
         # 如果内存使用量低于10MB,则删除所有容器并执行自定义语句2
-        if (( $(echo "$memory_usage_value < 10" | bc -l) )) || [ "$memory_usage_unit" = "KiB" ]; then
+        if (( \$(echo "\$memory_usage_value < 10" | bc -l) )) || [ "\$memory_usage_unit" = "KiB" ]; then
             if [ "\$(docker ps -aq)" ]; then
                 # 存在容器,删除所有容器
                 echo "发现存在容器,正在删除所有容器..."
