@@ -23,14 +23,15 @@ if [ "\$(docker ps -aq)" ]; then
 else
     echo "当前没有运行的容器。"
 fi
-
+sleep 1m
 # 执行自定义语句1
 eval \$custom_command1
 
 while true
 do
     # 延迟5分钟
-    sleep 5m
+    echo "开始监控。"
+    sleep 2m
 
     # 获取所有正在运行的Docker容器ID
     container_ids=\$(docker ps --format "{{.ID}}")
