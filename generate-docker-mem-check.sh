@@ -18,7 +18,7 @@ custom_command1="$custom_command1"
 if [ "\$(docker ps -aq)" ]; then
     # 存在容器,删除所有容器
     echo "发现存在容器,正在删除所有容器..."
-    docker ps -a -q | ForEach-Object { docker stop \$_ ; docker rm \$_ }
+    docker rm \$(docker ps -aq)
     echo "所有容器已删除。"
 else
     echo "当前没有运行的容器。"
@@ -44,11 +44,11 @@ do
         mem_usage_unit=\$(docker stats --no-stream --format "{{.MemUsage}}" \$container_id | awk '{print \$1}' | tr -d '[:digit:]')
         echo echo "容器 \$container_id 的使用内存大小为: \$mem_usage+\$mem_usage_unit"
         # 如果内存使用量低于10MB,则删除所有容器并执行自定义语句2
-        if (( \$(echo "\$mem_usage < 10" | bc -l) ))|| [ "\$mem_usage_unit" = "Kib" ]; then
+        if [ "\$mem_usage" -lt 10 ] || [ "\$mem_usage_unit" = "Kib" ]; then
             if [ "\$(docker ps -aq)" ]; then
                 # 存在容器,删除所有容器
                 echo "发现存在容器,正在删除所有容器..."
-                docker ps -a -q | ForEach-Object { docker stop \$_ ; docker rm \$_ }
+                docker rm \$(docker ps -aq)
                 echo "所有容器已删除。"
             else
                 echo "当前没有运行的容器。"
