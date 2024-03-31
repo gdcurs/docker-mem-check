@@ -25,8 +25,8 @@ else
 fi
 sleep 1m
 # 执行自定义语句1
-echo "启动容器。"
 eval \$custom_command1
+echo "开始监控。"
 count=0
 while true
 do
@@ -59,9 +59,9 @@ do
                     echo "当前没有运行的容器。"
                 fi
                 sleep 1m
-                count=\$((count + 1))
-                echo "启动容器，启动次数为\$count"
+                count=\$((count + 1))                
                 eval \$custom_command1
+                echo "重启成功，启动次数为\$count"
                 break
             fi
         fi
