@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 提示输入执行脚本
-echo "执行脚本:"
+echo "请输入IONET的执行代码脚本:"
 read -r custom_command1
 # 将双引号转义
 custom_command1=${custom_command1//\"/\\\"}
