@@ -13,8 +13,8 @@ cat << EOF > /root/docker-mem-check.sh
 # 自定义语句1
 custom_command1="$custom_command1"
 
-# 延迟1分钟后删除所有容器
-sleep 1m
+# 延迟30秒后删除所有容器
+sleep 30s
 if [ "\$(docker ps -aq)" ]; then
     # 存在容器,删除所有容器
     echo "发现存在容器,正在删除所有容器..."
@@ -23,7 +23,7 @@ if [ "\$(docker ps -aq)" ]; then
 else
     echo "当前没有运行的容器。"
 fi
-sleep 1m
+sleep 15s
 # 执行自定义语句1
 eval \$custom_command1
 echo "开始监控。"
