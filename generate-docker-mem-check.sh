@@ -42,17 +42,19 @@ do
         # 获取容器的CPUh和内存使用情况(以MB为单位)
         mem_usage=\$(docker stats --no-stream --format "{{.MemUsage}}" \$container_id | awk '{print \$1}' | tr -d '[:alpha:]')
         mem_usage_unit=\$(docker stats --no-stream --format "{{.MemUsage}}" \$container_id | awk '{print \$1}' | tr -d '[:digit:]')
+        dockercount=\$(docker ps -q | wc -l)
         #cpu_usage=\$(docker stats --no-stream --format "{{.CPUPerc}}" \$container_id | awk '{gsub(/%.*/, "", \$1); print \$1}')
         #echo echo "容器 \$container_id 的使用内存大小为: \$mem_usage+\$mem_usage_unit"
         # 如果内存使用量低于10MB,则删除所有容器并执行自定义语句2
         #if (( \$(echo "\$mem_usage < 10" | bc -l) )) || [ "\$mem_usage_unit" = "KiB" ] && (( \$(echo "\$cpu_usage < 0.01" | bc -l) )); then
-        if (( \$(echo "\$mem_usage < 10" | bc -l) )) || [ "\$mem_usage_unit" = "KiB" ]; then
+        if (( \$(echo "\$mem_usage < 10" | bc -l) )) || [ "\$mem_usage_unit" = "KiB" ] ||[ \$dockercount -ne 2 ]; then
             sleep 7m
             # 获取容器的内存使用情况(以MB为单位)
             mem_usage=\$(docker stats --no-stream --format "{{.MemUsage}}" \$container_id | awk '{print \$1}' | tr -d '[:alpha:]')
             mem_usage_unit=\$(docker stats --no-stream --format "{{.MemUsage}}" \$container_id | awk '{print \$1}' | tr -d '[:digit:]')
+            dockercount=\$(docker ps -q | wc -l)
             #cpu_usage=\$(docker stats --no-stream --format "{{.CPUPerc}}" \$container_id | awk '{gsub(/%.*/, "", \$1); print \$1}')
-            if (( \$(echo "\$mem_usage < 10" | bc -l) )) || [ "\$mem_usage_unit" = "KiB" ]; then
+            if (( \$(echo "\$mem_usage < 10" | bc -l) )) || [ "\$mem_usage_unit" = "KiB" ] ||[ \$dockercount -ne 2 ]; then
                 if [ "\$(docker ps -aq)" ]; then
                     # 存在容器,删除所有容器
                     echo "发现存在容器,正在删除所有容器..."
