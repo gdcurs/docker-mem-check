@@ -66,7 +66,7 @@ do
                 sleep 1m
                 count=\$((count + 1))                
                 eval \$custom_command1
-                echo "重启成功，启动次数为\$count"
+                echo "重启成功，重启次数为\$count,重启时内存为\$mem_usage\$mem_usage_unit，容器数量是\$dockercount"
                 break
             fi
         fi
