@@ -28,6 +28,7 @@ sleep 15s
 eval \$custom_command1
 echo "开始监控。"
 count=0
+sleep 5m
 while true
 do
     # 延迟3分钟
@@ -36,6 +37,12 @@ do
     # 获取所有正在运行的Docker容器ID
     container_ids=\$(docker ps --format "{{.ID}}")
     dockercount=\$(docker ps -q | wc -l)
+    if [ "\$dockercount" -ne 2 ]; then
+        count=\$((count + 1))                
+        eval \$custom_command1
+        echo "重启成功，重启次数为\$count,重启是由于容器数量是\$dockercount"
+        sleep 8m
+    fi
     # 遍历每个容器
     for container_id in \$container_ids
     do
@@ -46,14 +53,13 @@ do
         #echo echo "容器 \$container_id 的使用内存大小为: \$mem_usage+\$mem_usage_unit"
         # 如果内存使用量低于10MB,则删除所有容器并执行自定义语句2
         #if (( \$(echo "\$mem_usage < 10" | bc -l) )) || [ "\$mem_usage_unit" = "KiB" ] && (( \$(echo "\$cpu_usage < 0.01" | bc -l) )); then
-        if (( \$(echo "\$mem_usage < 10" | bc -l) )) || [ "\$mem_usage_unit" = "KiB" ] || [ "\$dockercount" -ne 2 ]; then
+        if (( \$(echo "\$mem_usage < 10" | bc -l) )) || [ "\$mem_usage_unit" = "KiB" ]; then
             sleep 7m
             # 获取容器的内存使用情况(以MB为单位)
             mem_usage=\$(docker stats --no-stream --format "{{.MemUsage}}" \$container_id | awk '{print \$1}' | tr -d '[:alpha:]')
             mem_usage_unit=\$(docker stats --no-stream --format "{{.MemUsage}}" \$container_id | awk '{print \$1}' | tr -d '[:digit:]')
-            dockercount=\$(docker ps -q | wc -l)
             #cpu_usage=\$(docker stats --no-stream --format "{{.CPUPerc}}" \$container_id | awk '{gsub(/%.*/, "", \$1); print \$1}')
-            if (( \$(echo "\$mem_usage < 10" | bc -l) )) || [ "\$mem_usage_unit" = "KiB" ] || [ "\$dockercount" -ne 2 ]; then
+            if (( \$(echo "\$mem_usage < 10" | bc -l) )) || [ "\$mem_usage_unit" = "KiB" ]; then
                 if [ "\$(docker ps -aq)" ]; then
                     # 存在容器,删除所有容器
                     echo "发现存在容器,正在删除所有容器..."
@@ -65,7 +71,7 @@ do
                 sleep 1m
                 count=\$((count + 1))                
                 eval \$custom_command1
-                echo "重启成功，重启次数为\$count,重启时内存为\$mem_usage\$mem_usage_unit,容器数量是\$dockercount"
+                echo "重启成功，重启次数为\$count,重启是由于内存为\$mem_usage\$mem_usage_unit"
                 break
             fi
         fi
