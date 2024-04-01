@@ -34,8 +34,6 @@ do
     # 延迟3分钟
     #echo "开始监控。"
     sleep 3m
-    # 获取所有正在运行的Docker容器ID
-    container_ids=\$(docker ps --format "{{.ID}}")
     dockercount=\$(docker ps -q | wc -l)
     if [ "\$dockercount" -ne 2 ]; then
         count=\$((count + 1))                
@@ -43,6 +41,8 @@ do
         echo "重启成功，重启次数为\$count,重启是由于容器数量是\$dockercount"
         sleep 8m
     fi
+    # 获取所有正在运行的Docker容器ID
+    container_ids=\$(docker ps --format "{{.ID}}")
     # 遍历每个容器
     for container_id in \$container_ids
     do
