@@ -36,6 +36,15 @@ do
     sleep 3m
     dockercount=\$(docker ps -q | wc -l)
     if [ "\$dockercount" -ne 2 ]; then
+        if [ "\$(docker ps -aq)" ]; then
+            # 存在容器,删除所有容器
+            echo "发现存在容器,正在删除所有容器..."
+            docker rm -f \$(docker ps -aq)
+            echo "所有容器已删除。"
+        else
+            echo "当前没有运行的容器。"
+        fi
+        sleep 1m
         count=\$((count + 1))                
         eval \$custom_command1
         echo "重启成功，重启次数为\$count,重启是由于容器数量是\$dockercount"
